@@ -1,0 +1,140 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  margin:0;
+  padding-bottom: 20px;
+  height: 15vh;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* HEADER STYLES */
+
+header h1 {
+  margin-top:0;
+  font-size: 1.5em;
+}
+
+#wrapper-header {
+  padding-top: 20px;
+}
+
+#header-bottom {
+  max-width: 100%;
+  background-color: #10109F;
+}
+
+
+/* BODY STYLES */
+
+#main-body {
+  margin-top: 15vh;
+}
+
+#wrapper-body {
+  min-height: calc(85vh - 388px);
+}
+
+/* LOGOS AND IMAGES */
+
+#logo-home {
+  max-height: 40vh;
+  max-width: 40vw;
+}
+
+#logo-header {
+  max-height: 10vh;
+  max-width: 10vw;
+}
+
+.info-icon {
+  max-width: 50px;
+  max-height: 50px;
+  margin-right: 10px;
+}
+
+.list-star-bullets {
+  list-style-image: url("../img/star.png");
+}
+
+/* MAP */
+#map {
+  height: 50vh;
+  width: 50vw;
+}
+
+/**********************/
+
+/* Form error styles */
+label.error {
+  font-size: 13px;
+  font-style: normal;
+  padding-left: 0px;
+  color: red;
+}
+
+label.error > ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.dropdown > a {
+  background: black;
+  text-transform: uppercase;
+}
+
+/* This displays the dropdown on hover */
+.dropdown:hover>.dropdown-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(128, 128, 128, 0.5);
+}
+
+
+/* FOOTER STYLES */
+
+footer {
+  color: #fff;
+  background-color: #222;
+
+  max-width: 100%; 
+  position: relative;
+
+  padding-top: 10px;
+  
+  margin-top: 20px;
+  /* negative value of footer height */
+  height:220px;
+  clear: both;
+}
+
+footer a {
+  color: #fff;
+}
+
+footer hr {
+  background-color: #292;
+  text-align: left;
+}
+
+.copyright {  
+  background-color: #464646;
+  margin-top: 8px;
+}
+

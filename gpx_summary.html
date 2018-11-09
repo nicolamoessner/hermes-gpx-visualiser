@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Hermes GPX Visualizer</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="css/leaflet.css" />        
+        <link rel="stylesheet" href="css/normalize.css" />
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/main.css" />        
+    </head>
+
+    <body>
+        
+        <!-- Page Header -->
+        <header class="mb-5">
+            <div id="wrapper-header">
+                <div class="container">                    
+                    <div class="row">
+                        <div class="col-4" id="header-logo">
+                            <h1><img src="img/hgv_logo.png" id="logo-header" class="py-2" alt=""/></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="header-bottom" class="py-2"></div>
+        </header>
+
+        <!-- Main content -->        
+        <div id="wrapper-body" class="center-block">
+            <div class="container">
+            
+                <div class="row">
+                    <div class="col-12">
+                        <div id="map"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <button id="gpx-console-view" class="col-md-4 btn btn-dark btn-lg">
+                        Console Log
+                    </button>
+                </div>
+
+                <div class="row my-5">
+                    <ul id="gpx-files-list">
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+        
+        <!-- Scipts -->
+        <script src="js/jquery-3.3.1.min.js" /></script>
+        <script src="js/bootstrap.bundle.min.js" /></script>
+        <script src="js/leaflet.js" /></script>
+        <script src="js/leafletembed.js" /></script>
+        <script src="js/main.js" /></script>
+
+    </body>
+</html>

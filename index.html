@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Hermes GPX Visualizer</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="css/normalize.css" />
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/main.css" />        
+    </head>
+
+    <body>
+        
+        <!-- Initial content -->
+        <div id="main-body" class="center-block">
+            <div class="container">
+                <!-- Display logo -->            
+                <div class="row">
+                    <div class="col-12">
+                        <img src="img/hgv_logo.png" id="logo-home" class="mx-auto d-block img-responsive" alt="Hermes GPX Visualiser"/>
+                    </div>                
+                </div>
+                <!-- - - - -->
+
+                <!-- Button for uploading gpx files. -->
+                <div class="row mt-5">
+                    <div id="gpx-upload" class="col-12">
+                        <!-- Hidden file input is clicked when button is clicked -->  
+                        <input type="file" accept=".gpx" id="gpx-upload-file" hidden multiple fileLimit=10 />
+                        <button id="gpx-upload-btn" class="col-8 offset-1 col-sm-6 offset-sm-3 col-md-4 offset-md-4 btn btn-dark btn-lg">
+                            Upload GPX File(s)...
+                        </button>
+                        <span class="ml-3 pointer" data-toggle="modal" data-target="#hgvInfoModal">
+                            <img src="img/info.png" alt="" class="info-icon">
+                        </span>
+
+                        <a href="gpx_summary.html" class="btn btn-primary btn-lg active" role="button" hidden>Map</a>
+
+                    </div>                
+                </div>
+                <!-- - - - -->
+
+                <!-- Content for displaying and processing users uploaded files. Initially hidden. -->
+                <div class="row my-4">
+                    <div class="col-6 offset-3 text-center">
+                        <!-- Block for displaying information on users' uploaded files. -->
+                        <div id="gpx-files" class="border-top d-none"></div>
+                        <!-- Button for generating GPX map and charts. -->
+                        <div id="gpx-generate-div" class="my-3">
+                            <a href="gpx_summary.html" id="gpx-generate-btn" class="btn btn-primary active d-none" role="button">Generate</a>
+                        </div>
+                    </div>                
+                </div>
+                <!-- - - - -->
+            </div>        
+        </div>
+
+        <!-- Hermes GPX Visualiser Information Modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="hgvInfoModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Hermes GPX Visualiser Information</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-star-bullets mb-5">
+                            <ul >
+                                <li>
+                                    a.
+                                </li>
+                                <li>
+                                    b.
+                                </li>
+                                <li>
+                                    c.
+                                </li>
+                                <li>
+                                    d.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- - - -->
+
+        <!-- Scipts -->
+        <script src="js/jquery-3.3.1.min.js" /></script>
+        <script src="js/bootstrap.bundle.min.js" /></script>
+        <script src="js/main.js" /></script>
+
+    </body>
+</html>
