@@ -12,7 +12,6 @@ $(document).ready(function() {
     /* Initialise the map then draw the first (possibly only) file uploaded b the user. */
     initmap();
     var gpxFileInitial = JSON.parse(sessionStorage.getItem(sessionStorage.key(0)));
-    console.log(gpxFileInitial);
     gpxMapRender(gpxFileInitial);
 
 });

@@ -100,7 +100,16 @@ function gpxFileParse(gpxFile) {
     reader.readAsText(gpxFile);
 }
 
-/* Creates a gpx object to store data from xml file.
+/* Creates a gpx object to store data from xml file. The gpxObject has the following form:
+ *
+ * {"name":
+ *  "time":
+ *  "type":
+ *  "trksegs": [ [ {"lat": xxx, "lon": xxx, "ele": xxx, "time": xxx, 
+ *                  "ext": {"hr": xxx, "cad": xxx} }, 
+ *                  ... ],
+ *               ... ], 
+ *  }
  *
  * Source: https://techglimpse.com/how-to-parse-xmlrss-and-store-in-html5-localstorage-using-jquery/ */
 function gpxObjectCreate(xmlDoc) {
