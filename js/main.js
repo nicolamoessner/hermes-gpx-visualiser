@@ -34,6 +34,7 @@ $(document).ready(function() {
             }
             $("#gpx-files").removeClass("d-none");
             $("#gpx-generate-btn").removeClass("d-none");
+            $("#gpx-upload-btn").removeClass("btn-lg");
         }
     });
 
