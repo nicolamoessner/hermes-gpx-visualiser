@@ -12,7 +12,8 @@ $(document).ready(function() {
     /* Initialise the map then draw the first (possibly only) file uploaded b the user. */
     initmap();
     var gpxFileInitial = JSON.parse(sessionStorage.getItem(sessionStorage.key(0)));
-    gpxMapRender(gpxFileInitial.name);
+    console.log(gpxFileInitial);
+    gpxMapRender(gpxFileInitial);
 
 });
 
@@ -35,11 +36,11 @@ function initmap() {
 /***********************************/
 
 
-/* Draws the route gpxName on the map using leaflet. */
-function gpxMapRender(gpxName) {
+/* Draws the route gpxKey on the map using leaflet. */
+function gpxMapRender(gpxKey) {
     
-    /* Load the file with track name gpxName from sessionStorage. */
-    var gpxFile = JSON.parse(sessionStorage.getItem(gpxName));
+    /* Load the file with track name gpxKey from sessionStorage. */
+    var gpxFile = JSON.parse(sessionStorage.getItem(gpxKey.name+" "+gpxKey.time));
 
     /* Go through each track segment and draw a Polyline on the map */
     for (seg of gpxFile.trksegs) {

@@ -104,8 +104,11 @@ function gpxFileParse(gpxFile) {
  *
  * Source: https://techglimpse.com/how-to-parse-xmlrss-and-store-in-html5-localstorage-using-jquery/ */
 function gpxObjectCreate(xmlDoc) {
+
     var gpxObject = new Object();
     gpxObject.name = xmlDoc.getElementsByTagName("name")[0].childNodes[0].nodeValue;
+    gpxObject.time = xmlDoc.getElementsByTagName("metadata")[0].getElementsByTagName("time")[0].childNodes[0].nodeValue;
+
     if (xmlDoc.getElementsByTagName("type")[0]) {
         gpxObject.type = xmlDoc.getElementsByTagName("type")[0].childNodes[0].nodeValue;
     }
