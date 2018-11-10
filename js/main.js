@@ -107,16 +107,39 @@ function gpxObjectCreate(xmlDoc) {
     if (xmlDoc.getElementsByTagName("type")[0]) {
         gpxObject.type = xmlDoc.getElementsByTagName("type")[0].childNodes[0].nodeValue;
     }
-    gpxObject.tracks = [];
 
-    var trackpoints = xmlDoc.getElementsByTagName("trkpt");
-    for (track of trackpoints) {
-        var trackObject = new Object();
-        trackObject.lat = track.getAttribute("lat");
-        trackObject.lon = track.getAttribute("lon");
-        trackObject.ele = track.getElementsByTagName("ele")[0].childNodes[0].nodeValue;
-        trackObject.time = track.getElementsByTagName("time")[0].childNodes[0].nodeValue; 
-        gpxObject.tracks.push(trackObject);
+    /* Create an empty list for storing each track segment, each of which are a list of trackObjects. */
+    gpxObject.trksegs = [];
+    var tracksegments = xmlDoc.getElementsByTagName("trkseg");
+    for (seg of tracksegments) {
+
+        /* For each segment, add to the list a new trackObject, which stores all the relevant data. */
+        var trkpts = [];
+        var trackpoints = seg.getElementsByTagName("trkpt");
+        for (track of trackpoints) {
+            var trackObject = new Object();
+            
+            trackObject.lat = track.getAttribute("lat");
+            trackObject.lon = track.getAttribute("lon");
+            trackObject.ele = track.getElementsByTagName("ele")[0].childNodes[0].nodeValue;
+            trackObject.time = track.getElementsByTagName("time")[0].childNodes[0].nodeValue;
+
+            /* Add extensions if they are included in the gpx file. */
+            if (track.getElementsByTagName("extensions")[0]) {
+                var extensions = track.getElementsByTagName("extensions")[0];
+                var trackExts = new Object();
+                if (extensions.getElementsByTagNameNS("*", "hr")[0]) {
+                    trackExts.hr = extensions.getElementsByTagNameNS("*", "hr")[0].childNodes[0].nodeValue;
+                }
+                if (extensions.getElementsByTagNameNS("*", "cad")[0]) {
+                    trackExts.cad = extensions.getElementsByTagNameNS("*", "cad")[0].childNodes[0].nodeValue;
+                }
+                /** ADD OTHER EXTENSIONS HERE USING THE SAME FORMAT **/
+                trackObject.ext = trackExts;
+            }
+            trkpts.push(trackObject);
+        }       
+        gpxObject.trksegs.push(trkpts);
     }
     return gpxObject;
 }
