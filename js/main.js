@@ -94,7 +94,8 @@ function gpxFileParse(gpxFile) {
         /* Create gpx object and save to session storage. */
         var gpxObj = gpxObjectCreate(doc);
         gpxName = doc.getElementsByTagName("name")[0].childNodes[0].nodeValue;
-        sessionStorage.setItem(gpxName, JSON.stringify(gpxObj));
+        gpxDate = doc.getElementsByTagName("metadata")[0].getElementsByTagName("time")[0].childNodes[0].nodeValue;
+        sessionStorage.setItem(gpxName+" "+gpxDate, JSON.stringify(gpxObj));
     }
     reader.readAsText(gpxFile);
 }
