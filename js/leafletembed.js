@@ -2,10 +2,12 @@ $(document).ready(function() {
     /* Create a div block in the html document, and add the list of filenames. */
     for (var i=0; i < sessionStorage.length ; i++) {
         var gpxName = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).name;
+        var gpxDate = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).time.substring(0,10);
+        var gpxTime = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).time.substring(11,19);
         var id = "tab_id_" + i;
         $("#gpx-files-list").append(
             '<a class="list-group-item list-group-item-action" id="'+id+'" href="#" \
-            onclick="routeSelected('+i+')" role="tab" aria-controls="home">'+gpxName+' </a>');
+            onclick="routeSelected('+i+')" role="tab" aria-controls="home">'+gpxName+' ('+gpxDate+'; '+gpxTime+')'+'</a>');
     }
 
     /* Initialise the map then draw the first (possibly only) file uploaded by the user. */
