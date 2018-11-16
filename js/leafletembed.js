@@ -18,12 +18,21 @@ $(document).ready(function() {
 /* Initialise an array with 10 colors for the different files. */
 var colors = ["#cc0000", "#00cc00", "#0033cc", "#cc6600", "#0099cc", "#9900cc", "#cccc00", "#00cc99", "#cc0066", "#99cc00"]
 
+/* Initialise variable hrIcon to store the info on the icon image. */
+var hrIcon = L.icon({
+    iconUrl: './img/hr.png',
+    iconSize:     [20, 20], // size of the icon
+    iconAnchor:   [10, 20], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
+});
+
 
 /*** Initialise the leaflet map. ***/
 var map;
 var ajaxRequest;
 var plotlist;
 var plotlayers=[];
+var markerGroup;
 function initmap() {
     // set up the map
     map = new L.Map('map');
@@ -51,12 +60,13 @@ function routeSelected(i) {
               plotlayers[j].remove(map);
             }
         }
+		/* Removes the icons from the map. */
+		map.removeLayer(markerGroup)
     } else {
         $("#"+id+"").addClass("active");
         gpxMapRender(i);
     }
 }
-
 
 /* Draws the route gpxKey on the map using leaflet. */
 function gpxMapRender(index) {
@@ -65,13 +75,17 @@ function gpxMapRender(index) {
 
     /* Load the file with track name gpxKey from sessionStorage. */
     // var gpxFile = JSON.parse(sessionStorage.getItem(gpxKey.name+" "+gpxKey.time));
-
+	markerGroup = L.layerGroup().addTo(map);
     /* Go through each track segment and draw a Polyline on the map */
     for (seg of gpxFile.trksegs) {
         /* Create an empty list then add to it the coordinates of each track point in the segment. */
         var pointList = [];
         for (var i=0; i < seg.length; i++) {
             pointList.push(new L.LatLng(seg[i].lat, seg[i].lon));
+			/* Add a heart rate icon for every num entry. */
+			if (i % 50 == 0){
+				L.marker([seg[i].lat,seg[i].lon], {icon: hrIcon}).addTo(markerGroup).bindPopup("Heart rate: "+seg[i].ext.hr);
+			}
         }
 
         /* Draw poplyline for current track segment. */
@@ -84,6 +98,7 @@ function gpxMapRender(index) {
         });
         firstPolyline.addTo(map);
         plotlayers.push(firstPolyline); // Add ployline layer to list of al layers.
+		
     }
 
     /* Set the map to view the starting position of the gpx file. */
