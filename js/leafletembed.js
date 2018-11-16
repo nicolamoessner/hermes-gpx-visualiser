@@ -1,13 +1,14 @@
 $(document).ready(function() {
     /* Create a div block in the html document, and add the list of filenames. */
     for (var i=0; i < sessionStorage.length ; i++) {
+        var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
         var gpxName = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).name;
         var gpxDate = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).time.substring(0,10);
         var gpxTime = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).time.substring(11,19);
         var id = "tab_id_" + i;
         $("#gpx-files-list").append(
             '<a class="list-group-item list-group-item-action" id="'+id+'" href="#" \
-            onclick="routeSelected('+i+')" role="tab" aria-controls="home">'+gpxName+' ('+gpxDate+'; '+gpxTime+')'+'</a>');
+            onclick="routeSelected('+i+', '+gpxFile+')" role="tab" aria-controls="home">'+gpxName+' ('+gpxDate+'; '+gpxTime+')'+'</a>');
     }
 
     /* Initialise the map then draw the first (possibly only) file uploaded by the user. */
@@ -15,6 +16,7 @@ $(document).ready(function() {
     // var gpxFileInitial = JSON.parse(sessionStorage.getItem(sessionStorage.key(0)));
     gpxMapRender(0);
     $("#tab_id_0").addClass("active");
+    renderDetailToggle(i, gpxFile);
 });
 
 /* Initialise an array with 10 colors for the different files. */
@@ -51,6 +53,7 @@ function routeSelected(i) {
     /* Build id of the tab divs */
     var id = "tab_id_" + i;
     var gpxKey = sessionStorage.key(i);
+    console.log("KEY IS", gpxKey);
 
     /* Check if the tab is already selected */
     if ($("#"+id+"").hasClass("active")) {
@@ -67,7 +70,33 @@ function routeSelected(i) {
     } else {
         $("#"+id+"").addClass("active");
         gpxMapRender(i);
+        // renderDetailToggle(gpxKey);
     }
+}
+
+function renderDetailToggle(id, gpxFile) {
+  var trackExts = [];
+  var trackExt = gpxFile.trksegs[0][0].ext;
+  /* Add a chart for each extension included in the gpx file. */
+  if (trackExt.hr) {
+      trackExts.push("hr");
+  }
+  if (trackExt.cad) {
+      trackExts.push("cad");
+  }
+  /** ADD OTHER EXTENSIONS HERE USING THE SAME FORMAT **/
+  if (trackExt.atemp) {
+      trackExts.push("atemp");
+  }
+
+  console.log("Extensions: ", trackExts);
+  for (ext of trackExts) {
+      var divId = "file-" + id + "-graph-" + ext;
+      $("#toggleContainer").append(
+        '<div id="'+divId+'"></div>'
+      );
+      // renderGraph(gpxFile, ext, divId);
+  }
 }
 
 /* Draws the route gpxKey on the map using leaflet. */
@@ -100,7 +129,7 @@ function gpxMapRender(index) {
         });
         firstPolyline.addTo(map);
         plotlayers.push(firstPolyline); // Add ployline layer to list of al layers.
-		
+
     }
 
     /* Set the map to view the starting position of the gpx file. */
