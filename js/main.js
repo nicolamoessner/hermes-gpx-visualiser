@@ -149,11 +149,17 @@ function gpxObjectCreate(xmlDoc) {
                     trackExts.cad = extensions.getElementsByTagNameNS("*", "cad")[0].childNodes[0].nodeValue;
                 }
                 /** ADD OTHER EXTENSIONS HERE USING THE SAME FORMAT **/
+
+                if (extensions.getElementsByTagNameNS("*", "atemp")[0]) {
+                    trackExts.atemp = extensions.getElementsByTagNameNS("*", "atemp")[0].childNodes[0].nodeValue;
+                }
                 trackObject.ext = trackExts;
             }
             trkpts.push(trackObject);
         }       
         gpxObject.trksegs.push(trkpts);
     }
+    
     return gpxObject;
 }
+
