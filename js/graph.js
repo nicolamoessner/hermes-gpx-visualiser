@@ -2,12 +2,13 @@ $(document).ready(function() {
     
     var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(0)));
 
+    console.log("graph")
     var data = []
     var earliesttime = 0
-    // var type = "Heart Rate"
-    // var unit = "BPM ( Beats Per Minute )"
-    var type = "Temperature"
-    var unit = "Degree ( Celsius )"
+    var type = "Heart Rate"
+    var unit = "BPM ( Beats Per Minute )"
+    // var type = "Temperature"
+    // var unit = "Degree ( Celsius )"
 
     for (seg of gpxFile.trksegs){
         
@@ -66,8 +67,6 @@ $(document).ready(function() {
             showInLegend: true,
             name: type,
             markerType: "square",
-            //Tue Oct 10 2017 13:13:59 GMT+0100 (BST)
-            // xValueFormatString: "HH:MM:SS",
             color: "#F08080",
             dataPoints : data
         }]
