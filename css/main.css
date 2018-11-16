@@ -43,6 +43,10 @@ header h1 {
   min-height: calc(85vh - 388px);
 }
 
+.toggler {
+  cursor: pointer;
+}
+
 /* LOGOS AND IMAGES */
 
 #logo-home {
@@ -113,11 +117,11 @@ footer {
   color: #fff;
   background-color: #222;
 
-  max-width: 100%; 
+  max-width: 100%;
   position: relative;
 
   padding-top: 10px;
-  
+
   margin-top: 20px;
   /* negative value of footer height */
   height:220px;
@@ -133,8 +137,7 @@ footer hr {
   text-align: left;
 }
 
-.copyright {  
+.copyright {
   background-color: #464646;
   margin-top: 8px;
 }
-

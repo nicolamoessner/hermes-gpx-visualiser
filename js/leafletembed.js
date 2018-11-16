@@ -1,14 +1,24 @@
 $(document).ready(function() {
     /* Create a div block in the html document, and add the list of filenames. */
     for (var i=0; i < sessionStorage.length ; i++) {
-        var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
+        var gpxFile = sessionStorage.getItem(sessionStorage.key(i));
         var gpxName = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).name;
         var gpxDate = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).time.substring(0,10);
         var gpxTime = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).time.substring(11,19);
         var id = "tab_id_" + i;
         $("#gpx-files-list").append(
-            '<a class="list-group-item list-group-item-action" id="'+id+'" href="#" \
-            onclick="routeSelected('+i+', '+gpxFile+')" role="tab" aria-controls="home">'+gpxName+' ('+gpxDate+'; '+gpxTime+')'+'</a>');
+            "<a class='list-group-item list-group-item-action' id='"+id+"' href='#' onclick='routeSelected("+i+", "+gpxFile+")' role='tab' aria-controls='home'>"+gpxName+" ("+gpxDate+"; "+gpxTime+")"+"</a>"
+          );
+
+        var togglerId = "file-" + i + "-toggler";
+        $("#togglesContainer").append(
+          "<div id="+togglerId+" class='btn btn-outline-info toggler' style='display: none;' onclick='toggle("+i+")'>Show Details for "+gpxName+" ("+gpxDate+"; "+gpxTime+")"+"</div>"
+        );
+        var detailsId = "file-" + i + "-details";
+        $("#togglesContainer").append(
+          "<div id="+detailsId+" style='display: none;'></div>"
+        );
+        renderDetailToggle(i, gpxFile);
     }
 
     /* Initialise the map then draw the first (possibly only) file uploaded by the user. */
@@ -16,7 +26,7 @@ $(document).ready(function() {
     // var gpxFileInitial = JSON.parse(sessionStorage.getItem(sessionStorage.key(0)));
     gpxMapRender(0);
     $("#tab_id_0").addClass("active");
-    renderDetailToggle(i, gpxFile);
+    $("#file-0-toggler").show();
 });
 
 /* Initialise an array with 10 colors for the different files. */
@@ -49,11 +59,10 @@ function initmap() {
 }
 /***********************************/
 
-function routeSelected(i) {
+function routeSelected(i, gpxFile) {
     /* Build id of the tab divs */
     var id = "tab_id_" + i;
-    var gpxKey = sessionStorage.key(i);
-    console.log("KEY IS", gpxKey);
+    //var gpxKey = sessionStorage.key(i);
 
     /* Check if the tab is already selected */
     if ($("#"+id+"").hasClass("active")) {
@@ -65,16 +74,38 @@ function routeSelected(i) {
               plotlayers[j].remove(map);
             }
         }
-		/* Removes the icons from the map. */
-		map.removeLayer(markerGroup)
+      /* Hide toggler & details. */
+      $("#file-"+i+"-toggler").hide();
+      $("#file-"+i+"-details").hide();
+		  /* Removes the icons from the map. */
+		  map.removeLayer(markerGroup)
+
+      /* Check if any files are selected, display message if not. */
+      // ToDo: Nicola
     } else {
         $("#"+id+"").addClass("active");
         gpxMapRender(i);
-        // renderDetailToggle(gpxKey);
+        /* Show toggler */
+        $("#file-"+i+"-toggler").show();
     }
 }
 
+function toggle(id) {
+  if ($("#file-"+id+"-details").is(":visible")) {
+    $("#file-"+id+"-toggler").removeClass("btn-outline-danger");
+    $("#file-"+id+"-toggler").addClass("btn-outline-info");
+  } else {
+    $("#file-"+id+"-toggler").removeClass("btn-outline-info");
+    $("#file-"+id+"-toggler").addClass("btn-outline-danger");
+  }
+  $( "#file-"+id+"-details" ).slideToggle( "slow", function() {
+    // Animation complete.
+  });
+
+}
+
 function renderDetailToggle(id, gpxFile) {
+  gpxFile = JSON.parse(gpxFile);
   var trackExts = [];
   var trackExt = gpxFile.trksegs[0][0].ext;
   /* Add a chart for each extension included in the gpx file. */
@@ -89,11 +120,12 @@ function renderDetailToggle(id, gpxFile) {
       trackExts.push("atemp");
   }
 
-  console.log("Extensions: ", trackExts);
+  // console.log("Extensions: ", trackExts);
   for (ext of trackExts) {
+      var parentDivId = "file-" + id + "-details";
       var divId = "file-" + id + "-graph-" + ext;
-      $("#toggleContainer").append(
-        '<div id="'+divId+'"></div>'
+      $("#"+parentDivId+"").append(
+        '<div id="'+divId+'">Here comes the div for File: '+divId+'</div>'
       );
       // renderGraph(gpxFile, ext, divId);
   }
