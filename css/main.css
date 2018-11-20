@@ -40,7 +40,14 @@ header h1 {
 }
 
 .toggler {
+  display: none;
   cursor: pointer;
+  width: 100%;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 2px;
+  margin-bottom: 0px;
+  border-radius: 5px;
 }
 
 /* LOGOS AND IMAGES */
@@ -78,4 +85,3 @@ header h1 {
 .pointer {
   cursor: pointer;
 }
-

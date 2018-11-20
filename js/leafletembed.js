@@ -12,7 +12,7 @@ $(document).ready(function() {
 
         var togglerId = "file-" + i + "-toggler";
         $("#togglesContainer").append(
-          "<div id="+togglerId+" class='btn btn-outline-info toggler' style='display: none;' onclick='toggle("+i+")'>Show Details for "+gpxName+" ("+gpxDate+"; "+gpxTime+")"+"</div>"
+          "<div id="+togglerId+" class='btn btn-outline-secondary toggler font-weight-bold' onclick='toggle("+i+")'>Details for: "+gpxName+" ("+gpxDate+"; "+gpxTime+")"+"</div>"
         );
         var detailsId = "file-" + i + "-details";
         $("#togglesContainer").append(
@@ -23,10 +23,10 @@ $(document).ready(function() {
 
     /* Initialise the map then draw the first (possibly only) file uploaded by the user. */
     initmap();
-    // var gpxFileInitial = JSON.parse(sessionStorage.getItem(sessionStorage.key(0)));
     gpxMapRender(0);
     $("#tab_id_0").addClass("active");
     $("#file-0-toggler").show();
+    toggle(0);
 });
 
 /* Initialise an array with 10 colors for the different files. */
@@ -92,11 +92,11 @@ function routeSelected(i, gpxFile) {
 
 function toggle(id) {
   if ($("#file-"+id+"-details").is(":visible")) {
-    $("#file-"+id+"-toggler").removeClass("btn-outline-danger");
-    $("#file-"+id+"-toggler").addClass("btn-outline-info");
+    $("#file-"+id+"-toggler").removeClass("btn-success");
+    $("#file-"+id+"-toggler").addClass("btn-outline-secondary");
   } else {
-    $("#file-"+id+"-toggler").removeClass("btn-outline-info");
-    $("#file-"+id+"-toggler").addClass("btn-outline-danger");
+    $("#file-"+id+"-toggler").removeClass("btn-outline-secondary");
+    $("#file-"+id+"-toggler").addClass("btn-success");
   }
   $( "#file-"+id+"-details" ).slideToggle( "slow", function() {
     // Animation complete.
@@ -106,7 +106,7 @@ function toggle(id) {
 
 /*** SOURCE: https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates-shows-wrong ***/
 //This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
-function calcCrow(lat1, lon1, lat2, lon2) 
+function calcCrow(lat1, lon1, lat2, lon2)
 {
   var R = 6371; // km
   var dLat = toRad(lat2-lat1);
@@ -115,13 +115,13 @@ function calcCrow(lat1, lon1, lat2, lon2)
   var lat2 = toRad(lat2);
 
   var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   var d = R * c;
   return d;
 }
 // Converts numeric degrees to radians
-function toRad(Value) 
+function toRad(Value)
 {
     return Value * Math.PI / 180;
 }
