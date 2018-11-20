@@ -25,11 +25,7 @@ header h1 {
 
 #wrapper-header {
   padding-top: 20px;
-}
-
-#header-bottom {
-  max-width: 100%;
-  background-color: #10109F;
+  background-color: #2C8FFF;
 }
 
 
@@ -55,8 +51,8 @@ header h1 {
 }
 
 #logo-header {
-  max-height: 10vh;
-  max-width: 10vw;
+  max-height: 15vh;
+  max-width: 15vw;
 }
 
 .info-icon {
@@ -71,73 +67,15 @@ header h1 {
 
 /* MAP */
 #map {
-  height: 50vh;
-  width: 50vw;
+  height: 100%;
+  min-height: 500px;
+  width: 100%;
 }
 
 /**********************/
 
-/* Form error styles */
-label.error {
-  font-size: 13px;
-  font-style: normal;
-  padding-left: 0px;
-  color: red;
-}
-
-label.error > ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
+/* Misc */
 .pointer {
   cursor: pointer;
 }
 
-.dropdown > a {
-  background: black;
-  text-transform: uppercase;
-}
-
-/* This displays the dropdown on hover */
-.dropdown:hover>.dropdown-menu {
-  display: flex;
-  flex-direction: column;
-}
-
-.dropdown-item:hover {
-  background-color: rgba(128, 128, 128, 0.5);
-}
-
-
-/* FOOTER STYLES */
-
-footer {
-  color: #fff;
-  background-color: #222;
-
-  max-width: 100%;
-  position: relative;
-
-  padding-top: 10px;
-
-  margin-top: 20px;
-  /* negative value of footer height */
-  height:220px;
-  clear: both;
-}
-
-footer a {
-  color: #fff;
-}
-
-footer hr {
-  background-color: #292;
-  text-align: left;
-}
-
-.copyright {
-  background-color: #464646;
-  margin-top: 8px;
-}

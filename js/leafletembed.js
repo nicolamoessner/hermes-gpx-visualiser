@@ -104,8 +104,53 @@ function toggle(id) {
 
 }
 
+/*** SOURCE: https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates-shows-wrong ***/
+//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
+function calcCrow(lat1, lon1, lat2, lon2) 
+{
+  var R = 6371; // km
+  var dLat = toRad(lat2-lat1);
+  var dLon = toRad(lon2-lon1);
+  var lat1 = toRad(lat1);
+  var lat2 = toRad(lat2);
+
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c;
+  return d;
+}
+// Converts numeric degrees to radians
+function toRad(Value) 
+{
+    return Value * Math.PI / 180;
+}
+/*** *********************************************** ***/
+
 function renderDetailToggle(id, gpxFile) {
   gpxFile = JSON.parse(gpxFile);
+  var parentDivId = "file-" + id + "-details";
+  var lastTrkpt = gpxFile.trksegs[gpxFile.trksegs.length-1][gpxFile.trksegs[gpxFile.trksegs.length-1].length-1];
+  var distance = 0;
+  for (seg of gpxFile.trksegs) {
+    for (i=0; i<(seg.length-1); i++) {
+      distance += calcCrow(seg[i].lat, seg[i].lon, seg[i+1].lat, seg[i+1].lon);
+    }
+  }
+  $("#"+parentDivId+"").append(
+    '<div class="row my-3">\
+        <div class="col-4"> \
+          <strong>Start Time:</strong> '+gpxFile.trksegs[0][0].time.substring(11,19)+' \
+        </div> \
+        <div class="col-4"> \
+          <strong>End Time:</strong> '+lastTrkpt.time.substring(11,19)+'\
+        </div> \
+        <div class="col-4"> \
+          <strong>Distance:</strong> '+distance.toFixed(2)+' km\
+        </div> \
+        \
+    </div>'
+    );
   var trackExts = [];
   var trackExt = gpxFile.trksegs[0][0].ext;
   /* Add a chart for each extension included in the gpx file. */
@@ -122,10 +167,11 @@ function renderDetailToggle(id, gpxFile) {
 
   // console.log("Extensions: ", trackExts);
   for (ext of trackExts) {
-      var parentDivId = "file-" + id + "-details";
       var divId = "file-" + id + "-graph-" + ext;
       $("#"+parentDivId+"").append(
-        '<div id="'+divId+'">Here comes the div for File: '+divId+'</div>'
+        '<div id="'+divId+'"> \
+          Here comes the div for File: '+divId+' \
+        </div>'
       );
       // renderGraph(gpxFile, ext, divId);
   }
