@@ -40,13 +40,12 @@ var hrIcon = L.icon({
     popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
 });
 
-
 /*** Initialise the leaflet map. ***/
 var map;
 var ajaxRequest;
 var plotlist;
 var plotlayers=[];
-var markerGroup;
+var markerGroup = {};
 function initmap() {
     // set up the map
     map = new L.Map('map');
@@ -58,6 +57,28 @@ function initmap() {
     map.addLayer(osm);
 }
 /***********************************/
+
+/* Adds the heart rate icons to the map */
+function addIcon(index){
+	var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(index)));
+	var markers = [];
+	for (seg of gpxFile.trksegs) {
+		for (var i=0; i < seg.length; i++) {
+			/* Add a heart rate icon for every num entry. */
+			if (i % 50 == 0){
+				markers.push(L.marker([seg[i].lat,seg[i].lon], {icon: hrIcon}).bindPopup("Heart rate: "+seg[i].ext.hr));
+			}
+        }
+		markerGroup[index] = L.layerGroup(markers).addTo(map);
+	}
+}
+
+/* Removes the heart rate icons from the map. */
+function delIcon(index){
+	map.removeLayer(markerGroup[index]);
+	delete markerGroup[index];
+}
+
 
 function routeSelected(i, gpxFile) {
     /* Build id of the tab divs */
@@ -77,9 +98,7 @@ function routeSelected(i, gpxFile) {
       /* Hide toggler & details. */
       $("#file-"+i+"-toggler").hide();
       $("#file-"+i+"-details").hide();
-		  /* Removes the icons from the map. */
-		  map.removeLayer(markerGroup)
-
+	  delIcon(i);
       /* Check if any files are selected, display message if not. */
       // ToDo: Nicola
     } else {
@@ -87,6 +106,7 @@ function routeSelected(i, gpxFile) {
         gpxMapRender(i);
         /* Show toggler */
         $("#file-"+i+"-toggler").show();
+		addIcon(i);
     }
 }
 
@@ -184,17 +204,12 @@ function gpxMapRender(index) {
 
     /* Load the file with track name gpxKey from sessionStorage. */
     // var gpxFile = JSON.parse(sessionStorage.getItem(gpxKey.name+" "+gpxKey.time));
-	markerGroup = L.layerGroup().addTo(map);
     /* Go through each track segment and draw a Polyline on the map */
     for (seg of gpxFile.trksegs) {
         /* Create an empty list then add to it the coordinates of each track point in the segment. */
         var pointList = [];
         for (var i=0; i < seg.length; i++) {
             pointList.push(new L.LatLng(seg[i].lat, seg[i].lon));
-			/* Add a heart rate icon for every num entry. */
-			if (i % 50 == 0){
-				L.marker([seg[i].lat,seg[i].lon], {icon: hrIcon}).addTo(markerGroup).bindPopup("Heart rate: "+seg[i].ext.hr);
-			}
         }
 
         /* Draw poplyline for current track segment. */
