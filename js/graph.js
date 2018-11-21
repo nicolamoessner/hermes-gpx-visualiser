@@ -1,77 +1,77 @@
 $(document).ready(function() {
-    
-    var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(0)));
 
-    console.log("graph")
-    var data = []
-    var earliesttime = 0
-    var type = "Heart Rate"
-    var unit = "BPM ( Beats Per Minute )"
-    // var type = "Temperature"
-    // var unit = "Degree ( Celsius )"
-
-    for (seg of gpxFile.trksegs){
         
-        for(var i =0 ;i<seg.length ; i++){
-            var time = seg[i].time;
+        var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(id)));
 
-            if(earliesttime == 0){
-                earliesttime = time
-            }
+        console.log("graph")
+        var data = []
+        var earliesttime = 0
+        var type = "Heart Rate"
+        var unit = "BPM ( Beats Per Minute )"
+        // var type = "Temperature"
+        // var unit = "Degree ( Celsius )"
 
-            if(type == "Temperature"  && seg[i].ext.atemp){
-                var atemp = seg[i].ext.atemp
-                data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(atemp)})
-                
-            } else if (type == "Heart Rate" && seg[i].ext.hr){
-                var hr = seg[i].ext.hr
-                data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(hr)})
-            }
+        for (seg of gpxFile.trksegs){
             
-        }
-    }
-    console.log(type)
+            for(var i =0 ;i<seg.length ; i++){
+                var time = seg[i].time;
 
-    var chart = new CanvasJS.Chart('chartContainer', {
-        animationEnabled: true,
-        theme: "light2",
-        title:{
-            text: type + " from " + gpxFile.name
-        },
-        axisX:{
-            // valueFormatString: "HH:MM:SS",
-            title : "Time (hr)",
-            crosshair: {
-                enabled: true,
-                snapToDataPoint: true
+                if(earliesttime == 0){
+                    earliesttime = time
+                }
+
+                if(type == "Temperature"  && seg[i].ext.atemp){
+                    var atemp = seg[i].ext.atemp
+                    data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(atemp)})
+                    
+                } else if (type == "Heart Rate" && seg[i].ext.hr){
+                    var hr = seg[i].ext.hr
+                    data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(hr)})
+                }
             }
-        },
-        axisY: {
-            title: unit,
-            crosshair: {
-                enabled: true
-            }
-        },
-        toolTip:{
-            shared:true
-        },  
-        legend:{
-            cursor:"pointer",
-            verticalAlign: "bottom",
-            horizontalAlign: "left",
-            dockInsidePlotArea: true,
-            itemclick: toogleDataSeries
-        },
-        data: [{
-            type: "line",
-            showInLegend: true,
-            name: type,
-            markerType: "square",
-            color: "#F08080",
-            dataPoints : data
-        }]
-    });
-    chart.render();
+        }
+        console.log(type)
+
+        var chart = new CanvasJS.Chart('chartContainer', {
+            animationEnabled: true,
+            theme: "light2",
+            title:{
+                text: type + " from " + gpxFile.name
+            },
+            axisX:{
+                title : "Time (hr)",
+                crosshair: {
+                    enabled: true,
+                    snapToDataPoint: true
+                }
+            },
+            axisY: {
+                title: unit,
+                crosshair: {
+                    enabled: true
+                }
+            },
+            toolTip:{
+                shared:true
+            },  
+            legend:{
+                cursor:"pointer",
+                verticalAlign: "bottom",
+                horizontalAlign: "left",
+                dockInsidePlotArea: true,
+                itemclick: toogleDataSeries
+            },
+            data: [{
+                type: "line",
+                showInLegend: true,
+                name: type,
+                markerType: "square",
+                color: "#F08080",
+                dataPoints : data
+            }]
+        });
+        chart.render();
+
     
     function toogleDataSeries(e){
         if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
@@ -81,6 +81,7 @@ $(document).ready(function() {
         }
         chart.render();
     }
+
 
     function toDate(time){
         var result = new Date();

@@ -24,6 +24,7 @@ $(document).ready(function() {
     /* Initialise the map then draw the first (possibly only) file uploaded by the user. */
     initmap();
     // var gpxFileInitial = JSON.parse(sessionStorage.getItem(sessionStorage.key(0)));
+    renderGraph(0);
     gpxMapRender(0);
     $("#tab_id_0").addClass("active");
     $("#file-0-toggler").show();
@@ -68,6 +69,7 @@ function routeSelected(i, gpxFile) {
     if ($("#"+id+"").hasClass("active")) {
         /* Remove active class form tab */
         $("#"+id+"").removeClass("active");
+        removeGraph(i);
         /* Get the selected polygon and remove it from the map. */
         for (var j = 0; j < plotlayers.length; j++) {
             if (plotlayers[j].options.id == i) {
@@ -84,6 +86,7 @@ function routeSelected(i, gpxFile) {
       // ToDo: Nicola
     } else {
         $("#"+id+"").addClass("active");
+        renderGraph(i);
         gpxMapRender(i);
         /* Show toggler */
         $("#file-"+i+"-toggler").show();
@@ -167,3 +170,117 @@ function gpxMapRender(index) {
     /* Set the map to view the starting position of the gpx file. */
     map.setView(new L.LatLng(gpxFile.trksegs[0][0].lat, gpxFile.trksegs[0][0].lon),15);
 }
+function renderGraph(id,inp_type){
+        var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(id)));
+
+        console.log("graph")
+        var data = []
+        var earliesttime = 0
+        var type
+        var unit
+        
+        if (inp_type == "atemp"){
+            type = "Temperature"
+            unit = "Degree ( Celsius )"
+        } else if (inp_type == "cad"){
+            type = "Cadence"
+            unit = "cadence unit"
+        } else{
+            type = "Heart Rate"
+            unit = "BPM ( Beats Per Minute )"
+        }
+
+        for (seg of gpxFile.trksegs){
+            
+            for(var i =0 ;i<seg.length ; i++){
+                var time = seg[i].time;
+
+                if(earliesttime == 0){
+                    earliesttime = time
+                }
+
+                if(type == "Temperature"  && seg[i].ext.atemp){
+                    var atemp = seg[i].ext.atemp
+                    data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(atemp)})
+                    
+                } else if (type == "Heart Rate" && seg[i].ext.hr){
+                    var hr = seg[i].ext.hr
+                    data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(hr)})
+                }
+                
+            }
+        }
+        console.log(type)
+
+        var chart = new CanvasJS.Chart('chartContainer', {
+            animationEnabled: true,
+            theme: "light2",
+            title:{
+                text: type + " from " + gpxFile.name
+            },
+            axisX:{
+                // valueFormatString: "HH:MM:SS",
+                title : "Time (hr)",
+                crosshair: {
+                    enabled: true,
+                    snapToDataPoint: true
+                }
+            },
+            axisY: {
+                title: unit,
+                crosshair: {
+                    enabled: true
+                }
+            },
+            toolTip:{
+                shared:true
+            },  
+            legend:{
+                cursor:"pointer",
+                verticalAlign: "bottom",
+                horizontalAlign: "left",
+                dockInsidePlotArea: true,
+                itemclick: toogleDataSeries
+            },
+            data: [{
+                type: "line",
+                showInLegend: true,
+                name: type,
+                markerType: "square",
+                color: "#F08080",
+                dataPoints : data
+            }]
+        });
+        chart.render();
+    }
+
+    function removeGraph(id){
+
+    }
+    
+    function toogleDataSeries(e){
+        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+            e.dataSeries.visible = false;
+        } else{
+            e.dataSeries.visible = true;
+        }
+        chart.render();
+    }
+
+
+    function toDate(time){
+        var result = new Date();
+       
+        result.setFullYear(time.substring(0,4));
+        result.setMonth(time.substring(5,7));
+        result.setDate(time.substring(8,10));
+        result.setHours(time.substring(11,13));
+        result.setMinutes(time.substring(14,16));
+        result.setSeconds(time.substring(17,19));
+
+        // console.log(result);
+        return result;
+    }
+
+    
+    
