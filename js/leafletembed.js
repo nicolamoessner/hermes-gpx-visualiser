@@ -7,7 +7,7 @@ $(document).ready(function() {
         var gpxTime = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).time.substring(11,19);
         var id = "tab_id_" + i;
         $("#gpx-files-list").append(
-            "<a class='list-group-item list-group-item-action' id='"+id+"' href='#' onclick='routeSelected("+i+", "+gpxFile+")' role='tab' aria-controls='home'>"+gpxName+" ("+gpxDate+"; "+gpxTime+")"+"</a>"
+            "<a class='list-group-item inactive-file font-weight-bold' id='"+id+"' href='#' onclick='routeSelected("+i+", "+gpxFile+")' role='tab' aria-controls='home'>"+gpxName+" ("+gpxDate+"; "+gpxTime+")"+"</a>"
           );
 
         var togglerId = "file-" + i + "-toggler";
@@ -23,14 +23,14 @@ $(document).ready(function() {
 
     /* Initialise the map then draw the first (possibly only) file uploaded by the user. */
     initmap();
-    gpxMapRender(0);
-    $("#tab_id_0").addClass("active");
-    $("#file-0-toggler").show();
+    routeSelected(0, sessionStorage.getItem(sessionStorage.key(0)));
     toggle(0);
 });
 
 /* Initialise an array with 10 colors for the different files. */
-var colors = ["#cc0000", "#00cc00", "#0033cc", "#cc6600", "#0099cc", "#9900cc", "#cccc00", "#00cc99", "#cc0066", "#99cc00"]
+var colors = ["#FF9700", "#FF660D", "#FF1A0D", "#FF0D67", "#F10DFF", "#5F0DFF", "#0D5CFF", "#0DF5FF", "#1AFF0D", "#F8FF0D"]
+/* Initialise an array to store selected files in. Functions like a stack. */
+var selectedFiles = [];
 
 /* Initialise variable hrIcon to store the info on the icon image. */
 var hrIcon = L.icon({
@@ -86,23 +86,49 @@ function routeSelected(i, gpxFile) {
     //var gpxKey = sessionStorage.key(i);
 
     /* Check if the tab is already selected */
-    if ($("#"+id+"").hasClass("active")) {
+    if ($("#"+id+"").hasClass("active-file")) {
         /* Remove active class form tab */
-        $("#"+id+"").removeClass("active");
+        $("#"+id+"").removeClass("active-file");
+        $("#"+id+"").css("background-color", "#fff");
         /* Get the selected polygon and remove it from the map. */
         for (var j = 0; j < plotlayers.length; j++) {
             if (plotlayers[j].options.id == i) {
               plotlayers[j].remove(map);
             }
         }
-      /* Hide toggler & details. */
-      $("#file-"+i+"-toggler").hide();
-      $("#file-"+i+"-details").hide();
-	  delIcon(i);
-      /* Check if any files are selected, display message if not. */
-      // ToDo: Nicola
+        /* Remove file from list of selected files. */
+        var index_rm;
+        for (var k = 0; k < selectedFiles.length; k++) {
+          if (selectedFiles[k] == i) {
+            index_rm = k;
+          }
+        }
+        selectedFiles.splice(index_rm, 1);
+
+        if (selectedFiles.length > 0) {
+          /* Focus map on latest file selected. */
+          var lastSelected = selectedFiles[selectedFiles.length - 1];
+          console.log("Last: ", lastSelected);
+          var lat = JSON.parse(sessionStorage.getItem(sessionStorage.key(lastSelected))).trksegs[0][0].lat;
+          var lon = JSON.parse(sessionStorage.getItem(sessionStorage.key(lastSelected))).trksegs[0][0].lon;
+          console.log(lat, lon);
+          map.setView([lat, lon]);
+        } else {
+          map.fitWorld();
+        }
+
+        /* Hide toggler & detail divs. */
+        $("#file-"+i+"-toggler").hide();
+        $("#file-"+i+"-details").hide();
+	      delIcon(i);
+        /* Check if any files are selected, display message if not. */
+        // ToDo: Nicola
     } else {
-        $("#"+id+"").addClass("active");
+        $("#"+id+"").removeClass("inactive-file");
+        $("#"+id+"").addClass("active-file");
+        $("#"+id+"").css("background-color", colors[i]),
+        selectedFiles.push(i);
+        console.log(selectedFiles);
         gpxMapRender(i);
         /* Show toggler */
         $("#file-"+i+"-toggler").show();
@@ -216,8 +242,8 @@ function gpxMapRender(index) {
         var firstPolyline = new L.Polyline(pointList, {
             id: index, // Same index for multiple segments!!!
             color: colors[index],
-            weight: 2,
-            opacity: 0.7,
+            weight: 5,
+            opacity: 0.8,
             smoothFactor: 1
         });
         firstPolyline.addTo(map);

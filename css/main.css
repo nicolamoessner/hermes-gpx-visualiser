@@ -39,6 +39,28 @@ header h1 {
   min-height: calc(85vh - 388px);
 }
 
+.inactive-file {
+  background-color: #fff;
+  border-color: #D9D9D9;
+  /* border-width: 0px 0px 0px 0px; */
+  color: black;
+}
+
+.active-file {
+  /* background-color: #cc00d0 !important; */
+  border-color: #D9D9D9 !important;
+  border-width: 0px 0px 0px 0px;
+  color: white;
+}
+
+.active-file:hover {
+  color: white;
+}
+
+.inactive-file:hover {
+  color: black;
+}
+
 .toggler {
   display: none;
   cursor: pointer;
