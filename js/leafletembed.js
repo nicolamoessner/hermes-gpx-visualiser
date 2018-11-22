@@ -130,6 +130,7 @@ function routeSelected(i, gpxFile) {
         selectedFiles.push(i);
         console.log(selectedFiles);
         gpxMapRender(i);
+        renderGraph(i);
         /* Show toggler */
         $("#file-"+i+"-toggler").show();
 		addIcon(i);
@@ -193,9 +194,9 @@ function renderDetailToggle(id, gpxFile) {
         </div> \
         <div class="col-4"> \
           <strong>Distance:</strong> '+distance.toFixed(2)+' km\
-        </div> \
-        \
-    </div>'
+        </div>'
+
+    
     );
   var trackExts = [];
   var trackExt = gpxFile.trksegs[0][0].ext;
@@ -218,9 +219,16 @@ function renderDetailToggle(id, gpxFile) {
         '<div id="'+divId+'"> \
           Here comes the div for File: '+divId+' \
         </div>'
-      );
-      // renderGraph(gpxFile, ext, divId);
+      );    
   }
+  // renderGraph(gpxFile, ext, divId);
+  $("#"+parentDivId+"").append(
+    '</div>\
+        <div class="row my-5">\
+        <div id="chartContainer'+ id + '" style="height: 400px; width: 100%;"></div>\
+    </div>'
+    
+    );
 }
 
 /* Draws the route gpxKey on the map using leaflet. */
@@ -296,7 +304,7 @@ function renderGraph(id,inp_type){
         }
         console.log(type)
 
-        var chart = new CanvasJS.Chart('chartContainer', {
+        var chart = new CanvasJS.Chart('chartContainer'+id, {
             animationEnabled: true,
             theme: "light2",
             title:{
