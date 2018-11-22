@@ -53,7 +53,7 @@ function initmap() {
     // create the tile layer with correct attribution
     var osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib='Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
-    var osm = new L.TileLayer(osmUrl, {minZoom: 6, maxZoom: 17, attribution: osmAttrib});
+    var osm = new L.TileLayer(osmUrl, {minZoom: 2, maxZoom: 17, attribution: osmAttrib});
     map.addLayer(osm);
 }
 /***********************************/
@@ -196,7 +196,7 @@ function renderDetailToggle(id, gpxFile) {
           <strong>Distance:</strong> '+distance.toFixed(2)+' km\
         </div>'
 
-    
+
     );
   var trackExts = [];
   var trackExt = gpxFile.trksegs[0][5].ext;
@@ -217,26 +217,26 @@ function renderDetailToggle(id, gpxFile) {
       var graph_render_type
       if(ext == "cad") continue
       graph_render_type = "renderGraph("+id+",'"+ext+"')"
-      
+
       $("#"+parentDivId+"").append(
         '<div id = "extension_btn'+divId+'" \
         class="btn btn-info" onclick="'+graph_render_type+'"> '+ ext +' \
         </div>'
-      );   
+      );
       var divId = "file-" + id + "-graph-" + ext;
     //   $("#"+parentDivId+"").append(
     //     '<div id="'+divId+'"> \
     //       Here comes the div for File: '+divId+' \
     //     </div>'
-    //   );    
+    //   );
   }
   // renderGraph(gpxFile, ext, divId);
   $("#"+parentDivId+"").append(
     '</div>\
-        <div class="row my-5">\
-        <div id="chartContainer'+ id + '" style="height: 400px; width: 100%;"></div>\
+        <div class="row my-0">\
+        <div id="chartContainer'+ id + '" style="height: 250px; width: 80%;"></div>\
     </div>'
-    
+
     );
 }
 
@@ -281,7 +281,7 @@ function renderGraph(id,inp_type){
         var earliesttime = 0
         var type
         var unit
-        
+
         if (inp_type == "atemp"){
             type = "Temperature"
             unit = "Degree ( Celsius )"
@@ -294,7 +294,7 @@ function renderGraph(id,inp_type){
         }
 
         for (seg of gpxFile.trksegs){
-            
+
             for(var i =0 ;i<seg.length ; i++){
                 var time = seg[i].time;
 
@@ -305,7 +305,7 @@ function renderGraph(id,inp_type){
                 if(type == "Temperature"  && seg[i].ext.atemp){
                     var atemp = seg[i].ext.atemp
                     data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(atemp)})
-                    
+
                 } else if (type == "Heart Rate" && seg[i].ext.hr){
                     var hr = seg[i].ext.hr
                     data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(hr)})
@@ -314,7 +314,7 @@ function renderGraph(id,inp_type){
                     var cad = seg[i].ext.cad
                     data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(cad)})
                 }
-                
+
             }
         }
         console.log(type)
@@ -341,7 +341,7 @@ function renderGraph(id,inp_type){
             },
             toolTip:{
                 shared:true
-            },  
+            },
             legend:{
                 cursor:"pointer",
                 verticalAlign: "bottom",
@@ -364,7 +364,7 @@ function renderGraph(id,inp_type){
     function removeGraph(id){
 
     }
-    
+
     function toogleDataSeries(e){
         if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
             e.dataSeries.visible = false;
@@ -377,7 +377,7 @@ function renderGraph(id,inp_type){
 
     function toDate(time){
         var result = new Date();
-       
+
         result.setFullYear(time.substring(0,4));
         result.setMonth(time.substring(5,7));
         result.setDate(time.substring(8,10));
@@ -388,6 +388,3 @@ function renderGraph(id,inp_type){
         // console.log(result);
         return result;
     }
-
-    
-    

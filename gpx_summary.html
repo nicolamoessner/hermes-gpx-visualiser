@@ -27,49 +27,49 @@
 
         <!-- Main content -->
         <div id="wrapper-body" class="center-block">
-            <div class="container">
-
-                <div class="row">
-                    <div class="col-12 col-sm-3 border-right my-1">
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <a href="index.html"><img src="img/return-btn.png" id="return-btn-img" class="img-fluid"></a>
-                            </div>
-                            <div class="col-6 mb-3">
-                                Return to upload a different set of gpx files.
-                            </div>
-                        </div>
-                        <hr />
-                        <h3 class="text-center"><strong>GPX Files</strong></h3>
-                        <ul id="gpx-files-list" class="list-group">
-                        </ul>
+          <div class="container mb-5">
+            <div class="row">
+                <div class="col-3 border-right my-1">
+                  <h3 class="text-center"><strong>GPX Files</strong></h3>
+                  <ul id="gpx-files-list" class="list-group">
+                  </ul>
+                  <div class="row pt-4">
+                    <div class="col-12 mb-3">
+                      <a href="index.html">
+                        <button type="button" class="btn btn-block btn-lg btn-outline-primary" data-toggle="popover"
+                        title="Return to upload a different set of gpx files.">Return to upload files</button>
+                      </a>
+                      <!-- <a href="index.html"><img src="img/return-btn.png" id="return-btn-img" class="img-fluid"></a> -->
                     </div>
-                    <div class="col-12 col-sm-7">
-                        <div id="map"></div>
-                    </div>
-					<div id="radio" class="col-12 col-sm-2">
-						<form action="#">
-							<p>
-							  <label>
-								<input name="rad" type="radio" checked />
-								<span>None</span>
-							  </label>
-							</p>
-							<p>
-							  <label>
-								<input name="rad" type="radio" />
-								<span>Heart Rate</span>
-							  </label>
-							</p>
-							<p>
-							  <label>
-								<input class="cad" name="rad" type="radio"  />
-								<span>Cadence</span>
-							  </label>
-							</p>
-						 </form>
-					</div>
+                    <!-- <div class="col-6 mb-3">
+                      Return to upload a different set of gpx files.
+                    </div> -->
+                  </div>
                 </div>
+                <div class="col-9 m-0 p-0">
+                  <div id="map"></div>
+                </div>
+            </div>
+            <div class="row pt-2">
+              <div class="col-3">
+              </div>
+              <div id="radio" class="col-9 col-sm-7">
+						    <form action="#">
+                  <label>
+                    <input name="rad" type="radio" checked />
+                    <span>None&nbsp;&nbsp;&nbsp;</span>
+                  </label>
+                  <label>
+                    <input name="rad" type="radio" />
+                    <span>Heart Rate&nbsp;&nbsp;&nbsp;</span>
+                  </label>
+                  <label>
+                    <input class="cad" name="rad" type="radio"  />
+                    <span>Cadence</span>
+							    </label>
+                </form>
+				      </div>
+              </div>
                 <hr />
                 <div class="row">
                   <!-- <div class="col-12"> -->
@@ -82,13 +82,14 @@
 
         <!-- Scipts -->
         <script src="js/jquery-3.3.1.min.js" /></script>
+        <script src="js/popper.min.js" /></script>
         <script src="js/bootstrap.bundle.min.js" /></script>
         <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
         <!-- <script src="js/graph.js"/></script> -->
         <script src="js/leaflet.js" /></script>
         <script src="js/leafletembed.js" /></script>
         <script src="js/main.js" /></script>
-        
+
 
     </body>
 </html>
