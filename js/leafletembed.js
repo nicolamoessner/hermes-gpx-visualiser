@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     /* Create a div block in the html document, and add the list of filenames. */
     for (var i=0; i < sessionStorage.length ; i++) {
         var gpxFile = sessionStorage.getItem(sessionStorage.key(i));
@@ -7,12 +8,12 @@ $(document).ready(function() {
         var gpxTime = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).time.substring(11,19);
         var id = "tab_id_" + i;
         $("#gpx-files-list").append(
-            "<a class='list-group-item inactive-file font-weight-bold' id='"+id+"' href='#' onclick='routeSelected("+i+", "+gpxFile+")' role='tab' aria-controls='home'>"+gpxName+"<br />("+gpxDate+"; "+gpxTime+")"+"</a>"
+            "<div class='list-group-item file-inList inactive-file font-weight-bold' id='"+id+"' href='#' onclick='routeSelected("+i+", "+gpxFile+")' role='tab' aria-controls='home'>"+gpxName+"<br />("+gpxDate+", "+gpxTime+")"+"</div>"
           );
 
         var togglerId = "file-" + i + "-toggler";
         $("#togglesContainer").append(
-          "<div id="+togglerId+" class='btn btn-outline-secondary toggler font-weight-bold' onclick='toggle("+i+")'>Details for: "+gpxName+"("+gpxDate+"; "+gpxTime+")"+"</div>"
+          "<div id="+togglerId+" class='btn toggler font-weight-bold text-white pt-1' style='background-color: "+colors[i]+"' onclick='toggle("+i+")'>Details for: "+gpxName+" ("+gpxDate+", "+gpxTime+")"+"</div>"
         );
         var detailsId = "file-" + i + "-details";
         $("#togglesContainer").append(
@@ -140,12 +141,12 @@ function routeSelected(i, gpxFile) {
 
 function toggle(id) {
   if ($("#file-"+id+"-details").is(":visible")) {
-    $("#file-"+id+"-toggler").removeClass("btn-success");
-    $("#file-"+id+"-toggler").addClass("btn-outline-secondary");
+    // $("#file-"+id+"-toggler").removeClass("btn-success");
+    // $("#file-"+id+"-toggler").addClass("btn-outline-secondary");
     // $("#file-"+id+"-toggler").css("border-color", colors[id]);
   } else {
-    $("#file-"+id+"-toggler").removeClass("btn-outline-secondary");
-    $("#file-"+id+"-toggler").addClass("btn-success");
+    // $("#file-"+id+"-toggler").removeClass("btn-outline-secondary");
+    // $("#file-"+id+"-toggler").addClass("btn-success");
     // $("#file-"+id+"-toggler").css("background-color", colors[id]);
   }
   $( "#file-"+id+"-details" ).slideToggle( "slow", function() {
@@ -198,8 +199,6 @@ function renderDetailToggle(id, gpxFile) {
         <div class="col-4"> \
           <strong>Distance:</strong> '+distance.toFixed(2)+' km\
         </div>'
-
-
     );
   var trackExts = [];
   var trackExt = gpxFile.trksegs[0][5].ext;
