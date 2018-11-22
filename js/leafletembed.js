@@ -73,7 +73,7 @@ function addIcon(index){
             }
         }
         markerGroup[index] = L.layerGroup(markers).addTo(map);
-	toggle[index] = markerGroup[index].addTo(map);
+	toggle[index] = markerGroup[index];
     }
 }
 
