@@ -46,6 +46,8 @@ var ajaxRequest;
 var plotlist;
 var plotlayers=[];
 var markerGroup = {};
+var toggle = {};
+
 function initmap() {
     // set up the map
     map = new L.Map('map');
@@ -60,23 +62,40 @@ function initmap() {
 
 /* Adds the heart rate icons to the map */
 function addIcon(index){
-	var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(index)));
-	var markers = [];
-	for (seg of gpxFile.trksegs) {
-		for (var i=0; i < seg.length; i++) {
-			/* Add a heart rate icon for every num entry. */
-			if (i % 50 == 0){
-				markers.push(L.marker([seg[i].lat,seg[i].lon], {icon: hrIcon}).bindPopup("Heart rate: "+seg[i].ext.hr));
-			}
+    var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(index)));
+    var markers = [];
+    for (seg of gpxFile.trksegs) {
+        for (var i=0; i < seg.length; i++) {
+	/* Add a heart rate icon for every num entry. */
+            if (i % 50 == 0){
+                markers.push(L.marker([seg[i].lat,seg[i].lon], {icon: hrIcon}).bindPopup("Heart rate: "+seg[i].ext.hr));
+            }
         }
-		markerGroup[index] = L.layerGroup(markers).addTo(map);
-	}
+        markerGroup[index] = L.layerGroup(markers);
+	toggle[index] = markerGroup[index].addTo(map);
+    }
 }
 
 /* Removes the heart rate icons from the map. */
 function delIcon(index){
-	map.removeLayer(markerGroup[index]);
-	delete markerGroup[index];
+    map.removeLayer(markerGroup[index]);
+    delete markerGroup[index];
+}
+
+function radClick() {
+    if (document.getElementById('none').checked){
+        Object.keys(markerGroup).forEach(function(key) {
+            map.removeLayer(toggle[key]);
+        });
+    }
+    else if (document.getElementById('hr').checked){
+        Object.keys(markerGroup).forEach(function(key) {
+            markerGroup[key].eachLayer(function (layer) {
+                toggle[key] = markerGroup[key];
+                map.addLayer(toggle[key]);
+             });
+        });
+    }
 }
 
 
@@ -120,7 +139,8 @@ function routeSelected(i, gpxFile) {
         /* Hide toggler & detail divs. */
         $("#file-"+i+"-toggler").hide();
         $("#file-"+i+"-details").hide();
-	      delIcon(i);
+	delIcon(i);
+        radClick();
         /* Check if any files are selected, display message if not. */
         // ToDo: Nicola
     } else {
@@ -133,7 +153,8 @@ function routeSelected(i, gpxFile) {
         renderGraph(i);
         /* Show toggler */
         $("#file-"+i+"-toggler").show();
-		addIcon(i);
+        addIcon(i);
+        radClick();
     }
 }
 
