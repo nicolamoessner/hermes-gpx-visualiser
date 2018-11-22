@@ -258,6 +258,7 @@ function renderDetailToggle(id, gpxFile) {
           <strong>Distance:</strong> '+distance.toFixed(2)+' km\
         </div>'
     );
+    
   var trackExts = [];
   var trackExt = gpxFile.trksegs[0][5].ext;
   /* Add a chart for each extension included in the gpx file. */
@@ -273,10 +274,22 @@ function renderDetailToggle(id, gpxFile) {
   }
 
   // console.log("Extensions: ", trackExts);
+  $("#"+parentDivId+"").append(
+    '<div class="row my-3">\
+        <div class="col-4"> \
+          <strong> Choose extension graph to show </strong> \
+        </div> \
+        <div class="col-4"> \
+          <strong>( click button to show, reclick it to close )</strong> \
+        </div> \
+    </div>'
+    );
+
+  //add button
   for (ext of trackExts) {
       var graph_render_type
       graph_render_type = "renderGraph("+id+",'"+ext+"')"
-
+      var divId = "file-" + id + "-graph-" + ext;
       var type;
       if (ext == "atemp"){
           type = "Temperature";
@@ -291,7 +304,8 @@ function renderDetailToggle(id, gpxFile) {
         class="btn btn-info mr-3" onclick="'+graph_render_type+'"> '+ type +' \
         </div>'
       );
-      var divId = "file-" + id + "-graph-" + ext;
+       
+      
     //   $("#"+parentDivId+"").append(
     //     '<div id="'+divId+'"> \
     //       Here comes the div for File: '+divId+' \
@@ -299,13 +313,16 @@ function renderDetailToggle(id, gpxFile) {
     //   );
   }
   // renderGraph(gpxFile, ext, divId);
-  $("#"+parentDivId+"").append(
-    '</div>\
-        <div class="row my-0">\
-        <div id="chartContainer'+ id + '" style="display: none; height: 250px; width: 80%;"></div>\
-    </div>'
-
-    );
+  for (ext of trackExts){
+    var divId = "file-" + id + "-graph-" + ext;
+    $("#"+parentDivId+"").append(
+        '</div>\
+            <div class="row my-0">\
+            <div id="chartContainer'+ id + ext +'" style="display: none; height: 250px; width: 80%;"></div>\
+        </div>'
+        );
+  }
+  
 }
 
 /* Draws the route gpxKey on the map using leaflet. */
@@ -340,10 +357,10 @@ function gpxMapRender(index) {
     map.setView(new L.LatLng(gpxFile.trksegs[0][0].lat, gpxFile.trksegs[0][0].lon),15);
 }
 function renderGraph(id,inp_type){
-        if ($("#chartContainer"+id+"").is(":hidden")) {
-          $("#chartContainer"+id+"").show();
+        if ($("#chartContainer"+id+inp_type+"").is(":hidden")) {
+          $("#chartContainer"+id+inp_type+"").show();
         } else {
-          $("#chartContainer"+id+"").hide();
+          $("#chartContainer"+id+inp_type+"").hide();
         }
         var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(id)));
 
@@ -391,7 +408,7 @@ function renderGraph(id,inp_type){
         }
         console.log(type)
 
-        var chart = new CanvasJS.Chart('chartContainer'+id, {
+        var chart = new CanvasJS.Chart('chartContainer'+id+inp_type, {
             animationEnabled: true,
             theme: "light2",
             title:{
