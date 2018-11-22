@@ -7,12 +7,12 @@ $(document).ready(function() {
         var gpxTime = JSON.parse(sessionStorage.getItem(sessionStorage.key(i))).time.substring(11,19);
         var id = "tab_id_" + i;
         $("#gpx-files-list").append(
-            "<a class='list-group-item inactive-file font-weight-bold' id='"+id+"' href='#' onclick='routeSelected("+i+", "+gpxFile+")' role='tab' aria-controls='home'>"+gpxName+" ("+gpxDate+"; "+gpxTime+")"+"</a>"
+            "<a class='list-group-item inactive-file font-weight-bold' id='"+id+"' href='#' onclick='routeSelected("+i+", "+gpxFile+")' role='tab' aria-controls='home'>"+gpxName+"<br />("+gpxDate+"; "+gpxTime+")"+"</a>"
           );
 
         var togglerId = "file-" + i + "-toggler";
         $("#togglesContainer").append(
-          "<div id="+togglerId+" class='btn btn-outline-secondary toggler font-weight-bold' onclick='toggle("+i+")'>Details for: "+gpxName+" ("+gpxDate+"; "+gpxTime+")"+"</div>"
+          "<div id="+togglerId+" class='btn btn-outline-secondary toggler font-weight-bold' onclick='toggle("+i+")'>Details for: "+gpxName+"("+gpxDate+"; "+gpxTime+")"+"</div>"
         );
         var detailsId = "file-" + i + "-details";
         $("#togglesContainer").append(
@@ -27,8 +27,9 @@ $(document).ready(function() {
     toggle(0);
 });
 
-/* Initialise an array with 10 colors for the different files. */
-var colors = ["#FF9700", "#FF660D", "#FF1A0D", "#FF0D67", "#F10DFF", "#5F0DFF", "#0D5CFF", "#0DF5FF", "#1AFF0D", "#F8FF0D"]
+/* Initialise an array with 10 colors for the different files. Yellow:F7BB27 Orange:FF553A, FF9700, FF660D */
+var colors = ["#FF9700", "#FF660D", "#C8003C", "#900F40", "#591D46", "#485E6E", "#519597", "#81A36D", "#A8BA75", "#6D6875"];
+var colorsInactive = ["#874F00", "#FF660D", "#C8003C", "#900F40", "#591D46", "#485E6E", "#519597", "#81A36D", "#A8BA75", "#6D6875"];
 /* Initialise an array to store selected files in. Functions like a stack. */
 var selectedFiles = [];
 
@@ -150,7 +151,7 @@ function routeSelected(i, gpxFile) {
         selectedFiles.push(i);
         console.log(selectedFiles);
         gpxMapRender(i);
-        renderGraph(i);
+        // renderGraph(i);
         /* Show toggler */
         $("#file-"+i+"-toggler").show();
         addIcon(i);
@@ -162,9 +163,11 @@ function toggle(id) {
   if ($("#file-"+id+"-details").is(":visible")) {
     $("#file-"+id+"-toggler").removeClass("btn-success");
     $("#file-"+id+"-toggler").addClass("btn-outline-secondary");
+    // $("#file-"+id+"-toggler").css("border-color", colors[id]);
   } else {
     $("#file-"+id+"-toggler").removeClass("btn-outline-secondary");
     $("#file-"+id+"-toggler").addClass("btn-success");
+    // $("#file-"+id+"-toggler").css("background-color", colors[id]);
   }
   $( "#file-"+id+"-details" ).slideToggle( "slow", function() {
     // Animation complete.
@@ -236,12 +239,20 @@ function renderDetailToggle(id, gpxFile) {
   // console.log("Extensions: ", trackExts);
   for (ext of trackExts) {
       var graph_render_type
-      if(ext == "cad") continue
       graph_render_type = "renderGraph("+id+",'"+ext+"')"
+
+      var type;
+      if (ext == "atemp"){
+          type = "Temperature";
+      } else if (ext == "cad"){
+          type = "Cadence";
+      } else{
+          type = "Heart Rate";
+      }
 
       $("#"+parentDivId+"").append(
         '<div id = "extension_btn'+divId+'" \
-        class="btn btn-info" onclick="'+graph_render_type+'"> '+ ext +' \
+        class="btn btn-info mr-3" onclick="'+graph_render_type+'"> '+ type +' \
         </div>'
       );
       var divId = "file-" + id + "-graph-" + ext;
@@ -255,7 +266,7 @@ function renderDetailToggle(id, gpxFile) {
   $("#"+parentDivId+"").append(
     '</div>\
         <div class="row my-0">\
-        <div id="chartContainer'+ id + '" style="height: 250px; width: 80%;"></div>\
+        <div id="chartContainer'+ id + '" style="display: none; height: 250px; width: 80%;"></div>\
     </div>'
 
     );
@@ -280,8 +291,8 @@ function gpxMapRender(index) {
         var firstPolyline = new L.Polyline(pointList, {
             id: index, // Same index for multiple segments!!!
             color: colors[index],
-            weight: 5,
-            opacity: 0.8,
+            weight: 3,
+            opacity: 1,
             smoothFactor: 1
         });
         firstPolyline.addTo(map);
@@ -293,7 +304,11 @@ function gpxMapRender(index) {
     map.setView(new L.LatLng(gpxFile.trksegs[0][0].lat, gpxFile.trksegs[0][0].lon),15);
 }
 function renderGraph(id,inp_type){
-
+        if ($("#chartContainer"+id+"").is(":hidden")) {
+          $("#chartContainer"+id+"").show();
+        } else {
+          $("#chartContainer"+id+"").hide();
+        }
         var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(id)));
 
         console.log("graph")
