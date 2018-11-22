@@ -199,7 +199,7 @@ function renderDetailToggle(id, gpxFile) {
     
     );
   var trackExts = [];
-  var trackExt = gpxFile.trksegs[0][0].ext;
+  var trackExt = gpxFile.trksegs[0][5].ext;
   /* Add a chart for each extension included in the gpx file. */
   if (trackExt.hr) {
       trackExts.push("hr");
@@ -214,12 +214,21 @@ function renderDetailToggle(id, gpxFile) {
 
   // console.log("Extensions: ", trackExts);
   for (ext of trackExts) {
-      var divId = "file-" + id + "-graph-" + ext;
+      var graph_render_type
+      if(ext == "cad") continue
+      graph_render_type = "renderGraph("+id+",'"+ext+"')"
+      
       $("#"+parentDivId+"").append(
-        '<div id="'+divId+'"> \
-          Here comes the div for File: '+divId+' \
+        '<div id = "extension_btn'+divId+'" \
+        class="btn btn-info" onclick="'+graph_render_type+'"> '+ ext +' \
         </div>'
-      );    
+      );   
+      var divId = "file-" + id + "-graph-" + ext;
+    //   $("#"+parentDivId+"").append(
+    //     '<div id="'+divId+'"> \
+    //       Here comes the div for File: '+divId+' \
+    //     </div>'
+    //   );    
   }
   // renderGraph(gpxFile, ext, divId);
   $("#"+parentDivId+"").append(
@@ -263,9 +272,11 @@ function gpxMapRender(index) {
     map.setView(new L.LatLng(gpxFile.trksegs[0][0].lat, gpxFile.trksegs[0][0].lon),15);
 }
 function renderGraph(id,inp_type){
+
         var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(id)));
 
         console.log("graph")
+        console.log(inp_type)
         var data = []
         var earliesttime = 0
         var type
@@ -276,7 +287,7 @@ function renderGraph(id,inp_type){
             unit = "Degree ( Celsius )"
         } else if (inp_type == "cad"){
             type = "Cadence"
-            unit = "cadence unit"
+            unit = "Cycle per minute"
         } else{
             type = "Heart Rate"
             unit = "BPM ( Beats Per Minute )"
@@ -298,6 +309,10 @@ function renderGraph(id,inp_type){
                 } else if (type == "Heart Rate" && seg[i].ext.hr){
                     var hr = seg[i].ext.hr
                     data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(hr)})
+
+                } else if (type == "Cadence" && seg[i].ext.hr){
+                    var cad = seg[i].ext.cad
+                    data.push({x : (toDate(time).getTime() - toDate(earliesttime).getTime()) / (3600 * 60), y : parseInt(cad)})
                 }
                 
             }
