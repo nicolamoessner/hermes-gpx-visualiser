@@ -41,13 +41,22 @@ var hrIcon = L.icon({
     popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
 });
 
+var cadIcon = L.icon({
+    iconUrl: './img/cad.png',
+    iconSize:     [20, 20], // size of the icon
+    iconAnchor:   [10, 20], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
+});
+
 /*** Initialise the leaflet map. ***/
 var map;
 var ajaxRequest;
 var plotlist;
 var plotlayers=[];
-var markerGroup = {};
-var toggle = {};
+var hrMarkerGroup = {};
+var hrToggle = {};
+var cadMarkerGroup = {};
+var cadToggle = {};
 
 function initmap() {
     // set up the map
@@ -64,37 +73,66 @@ function initmap() {
 /* Adds the heart rate icons to the map */
 function addIcon(index){
     var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(index)));
-    var markers = [];
+    var hrMarkers = [];
+    var cadMarkers = [];
     for (seg of gpxFile.trksegs) {
         for (var i=0; i < seg.length; i++) {
         /* Add a heart rate icon for every num entry. */
             if (i % 50 == 0){
-                markers.push(L.marker([seg[i].lat,seg[i].lon], {icon: hrIcon}).bindPopup("Heart rate: "+seg[i].ext.hr));
+                hrMarkers.push(L.marker([seg[i].lat,seg[i].lon], {icon: hrIcon}).bindPopup("Heart rate: "+seg[i].ext.hr));
+                cadMarkers.push(L.marker([seg[i].lat,seg[i].lon], {icon: cadIcon}).bindPopup("Cadence: "+seg[i].ext.cad));
             }
         }
-        markerGroup[index] = L.layerGroup(markers).addTo(map);
-	toggle[index] = markerGroup[index];
+        hrMarkerGroup[index] = L.layerGroup(hrMarkers);
+	hrToggle[index] = hrMarkerGroup[index].addTo(map);
+        cadMarkerGroup[index] = L.layerGroup(cadMarkers);
+	cadToggle[index] = cadMarkerGroup[index].addTo(map);
     }
 }
 
 /* Removes the heart rate icons from the map. */
 function delIcon(index){
-	map.removeLayer(markerGroup[index]);
-	delete markerGroup[index];
+    if (document.getElementById('hr').checked){
+	map.removeLayer(hrMarkerGroup[index]);
+	delete hrMarkerGroup[index];
+        delete hrToggle[index];
+    }
+    else if (document.getElementById('cad').checked){
+        map.removeLayer(cadMarkerGroup[index]);
+	delete cadMarkerGroup[index];
+        delete cadToggle[index];
+    }
 }
 
 function radClick() {
     if (document.getElementById('none').checked){
-        Object.keys(markerGroup).forEach(function(key) {
-            map.removeLayer(toggle[key]);
+        Object.keys(hrMarkerGroup).forEach(function(key) {
+            map.removeLayer(hrToggle[key]);
+        });
+        Object.keys(cadMarkerGroup).forEach(function(key) {
+            map.removeLayer(cadToggle[key]);
         });
     }
     else if (document.getElementById('hr').checked){
-        Object.keys(markerGroup).forEach(function(key) {
-            markerGroup[key].eachLayer(function (layer) {
-                toggle[key] = markerGroup[key];
-                map.addLayer(toggle[key]);
+        Object.keys(hrMarkerGroup).forEach(function(key) {
+            hrMarkerGroup[key].eachLayer(function (layer) {
+                hrToggle[key] = hrMarkerGroup[key];
+                map.addLayer(hrToggle[key]);
              });
+        });
+        Object.keys(cadMarkerGroup).forEach(function(key) {
+            map.removeLayer(cadToggle[key]);
+        });
+    }
+    else if (document.getElementById('cad').checked){
+        Object.keys(cadMarkerGroup).forEach(function(key) {
+            cadMarkerGroup[key].eachLayer(function (layer) {
+                cadToggle[key] = cadMarkerGroup[key];
+                map.addLayer(cadToggle[key]);
+            });
+        });
+        Object.keys(hrMarkerGroup).forEach(function(key) {
+            map.removeLayer(hrToggle[key]);
         });
     }
 }
