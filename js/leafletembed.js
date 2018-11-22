@@ -130,7 +130,7 @@ function routeSelected(i, gpxFile) {
         selectedFiles.push(i);
         console.log(selectedFiles);
         gpxMapRender(i);
-        renderGraph(i);
+        // renderGraph(i);
         /* Show toggler */
         $("#file-"+i+"-toggler").show();
 		addIcon(i);
@@ -234,7 +234,7 @@ function renderDetailToggle(id, gpxFile) {
   $("#"+parentDivId+"").append(
     '</div>\
         <div class="row my-0">\
-        <div id="chartContainer'+ id + '" style="height: 250px; width: 80%;"></div>\
+        <div id="chartContainer'+ id + '" style="display: none; height: 250px; width: 80%;"></div>\
     </div>'
 
     );
@@ -272,7 +272,11 @@ function gpxMapRender(index) {
     map.setView(new L.LatLng(gpxFile.trksegs[0][0].lat, gpxFile.trksegs[0][0].lon),15);
 }
 function renderGraph(id,inp_type){
-
+        if ($("#chartContainer"+id+"").is(":hidden")) {
+          $("#chartContainer"+id+"").show();
+        } else {
+          $("#chartContainer"+id+"").hide();
+        }
         var gpxFile = JSON.parse(sessionStorage.getItem(sessionStorage.key(id)));
 
         console.log("graph")
