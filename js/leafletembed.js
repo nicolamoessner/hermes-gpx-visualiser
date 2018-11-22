@@ -67,20 +67,20 @@ function addIcon(index){
     var markers = [];
     for (seg of gpxFile.trksegs) {
         for (var i=0; i < seg.length; i++) {
-	/* Add a heart rate icon for every num entry. */
+        /* Add a heart rate icon for every num entry. */
             if (i % 50 == 0){
                 markers.push(L.marker([seg[i].lat,seg[i].lon], {icon: hrIcon}).bindPopup("Heart rate: "+seg[i].ext.hr));
             }
         }
-        markerGroup[index] = L.layerGroup(markers);
+        markerGroup[index] = L.layerGroup(markers).addTo(map);
 	toggle[index] = markerGroup[index].addTo(map);
     }
 }
 
 /* Removes the heart rate icons from the map. */
 function delIcon(index){
-    map.removeLayer(markerGroup[index]);
-    delete markerGroup[index];
+	map.removeLayer(markerGroup[index]);
+	delete markerGroup[index];
 }
 
 function radClick() {
@@ -98,7 +98,6 @@ function radClick() {
         });
     }
 }
-
 
 function routeSelected(i, gpxFile) {
     /* Build id of the tab divs */
