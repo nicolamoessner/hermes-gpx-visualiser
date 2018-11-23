@@ -314,7 +314,7 @@ function renderDetailToggle(id, gpxFile) {
     $("#"+parentDivId+"").append(
         '</div>\
             <div class="row my-0 ml-1">\
-            <div id="chartContainer'+ id + ext +'" style="display: none; height: 200px; width: 80%;"></div>\
+            <div id="chartContainer'+ id + ext +'" style="display: none; height: 200px; width: 90%;"></div>\
         </div>'
     );
   }
