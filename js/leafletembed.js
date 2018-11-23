@@ -13,11 +13,11 @@ $(document).ready(function() {
 
         var togglerId = "file-" + i + "-toggler";
         $("#togglesContainer").append(
-          "<div id="+togglerId+" class='btn toggler font-weight-bold text-white pt-1' style='background-color: "+colors[i]+"' onclick='toggle("+i+")'>Details for: "+gpxName+" ("+gpxDate+", "+gpxTime+")"+"</div>"
+          "<div id="+togglerId+" class='btn toggler font-weight-bold text-white pt-0 rounded-0' style='background-color: "+colors[i]+"' onclick='toggle("+i+")'>Details for: "+gpxName+" ("+gpxDate+", "+gpxTime+")"+"</div>"
         );
         var detailsId = "file-" + i + "-details";
         $("#togglesContainer").append(
-          "<div id="+detailsId+" style='display: none;'></div>"
+          "<div id="+detailsId+" style='display: none; border-color: #f2f2f2' class='pl-4 pb-1 mb-2 border border-top-0'></div>"
         );
         renderDetailToggle(i, gpxFile);
     }
@@ -247,18 +247,21 @@ function renderDetailToggle(id, gpxFile) {
     }
   }
   $("#"+parentDivId+"").append(
-    '<div class="row my-3">\
-        <div class="col-4"> \
-          <strong>Start Time:</strong> '+gpxFile.trksegs[0][0].time.substring(11,19)+' \
+    '<div class="row py-2">\
+        <div class="col-6" id="'+parentDivId+'-col4"> \
+          \
         </div> \
-        <div class="col-4"> \
-          <strong>End Time:</strong> '+lastTrkpt.time.substring(11,19)+'\
+        <div class="col-2 text-center"> \
+          <strong>Start Time</strong><br />'+gpxFile.trksegs[0][0].time.substring(11,19)+' \
         </div> \
-        <div class="col-4"> \
-          <strong>Distance:</strong> '+distance.toFixed(2)+' km\
+        <div class="col-2 text-center"> \
+          <strong>End Time</strong><br />'+lastTrkpt.time.substring(11,19)+'\
+        </div> \
+        <div class="col-2 text-center"> \
+          <strong>Distance</strong><br />'+distance.toFixed(2)+' km\
         </div>'
     );
-    
+
   var trackExts = [];
   var trackExt = gpxFile.trksegs[0][5].ext;
   /* Add a chart for each extension included in the gpx file. */
@@ -274,16 +277,16 @@ function renderDetailToggle(id, gpxFile) {
   }
 
   // console.log("Extensions: ", trackExts);
-  $("#"+parentDivId+"").append(
-    '<div class="row my-3">\
-        <div class="col-4"> \
-          <strong> Choose extension graph to show </strong> \
-        </div> \
-        <div class="col-4"> \
-          <strong>( click button to show, reclick it to close )</strong> \
-        </div> \
-    </div>'
-    );
+  // $("#"+parentDivId+"").append(
+  //   '<div class="row my-3">\
+  //       <div class="col-4"> \
+  //         <strong> Choose extension graph to show </strong> \
+  //       </div> \
+  //       <div class="col-4"> \
+  //         <strong>( click button to show, reclick it to close )</strong> \
+  //       </div> \
+  //   </div>'
+  //   );
 
   //add button
   for (ext of trackExts) {
@@ -299,30 +302,23 @@ function renderDetailToggle(id, gpxFile) {
           type = "Heart Rate";
       }
 
-      $("#"+parentDivId+"").append(
-        '<div id = "extension_btn'+divId+'" \
-        class="btn btn-info mr-3" onclick="'+graph_render_type+'"> '+ type +' \
+      $("#"+parentDivId+"-col4").append(
+        '<div id="extension_btn'+divId+'" \
+        class="btn btn-outline-info mr-2" onclick="'+graph_render_type+'"> '+ type +' \
         </div>'
       );
-       
-      
-    //   $("#"+parentDivId+"").append(
-    //     '<div id="'+divId+'"> \
-    //       Here comes the div for File: '+divId+' \
-    //     </div>'
-    //   );
   }
   // renderGraph(gpxFile, ext, divId);
   for (ext of trackExts){
     var divId = "file-" + id + "-graph-" + ext;
     $("#"+parentDivId+"").append(
         '</div>\
-            <div class="row my-0">\
-            <div id="chartContainer'+ id + ext +'" style="display: none; height: 250px; width: 80%;"></div>\
+            <div class="row my-0 ml-1">\
+            <div id="chartContainer'+ id + ext +'" style="display: none; height: 200px; width: 80%;"></div>\
         </div>'
-        );
+    );
   }
-  
+
 }
 
 /* Draws the route gpxKey on the map using leaflet. */
@@ -354,7 +350,7 @@ function gpxMapRender(index) {
     }
 
     /* Set the map to view the starting position of the gpx file. */
-    map.setView(new L.LatLng(gpxFile.trksegs[0][0].lat, gpxFile.trksegs[0][0].lon),15);
+    map.setView(new L.LatLng(gpxFile.trksegs[0][0].lat, gpxFile.trksegs[0][0].lon), 13);
 }
 function renderGraph(id,inp_type){
         if ($("#chartContainer"+id+inp_type+"").is(":hidden")) {
@@ -412,7 +408,7 @@ function renderGraph(id,inp_type){
             animationEnabled: true,
             theme: "light2",
             title:{
-                text: type + " from " + gpxFile.name
+                text: type /* +  " from " + gpxFile.name */
             },
             axisX:{
                 // valueFormatString: "HH:MM:SS",
