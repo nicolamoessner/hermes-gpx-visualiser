@@ -84,25 +84,23 @@ function addIcon(index){
                 cadMarkers.push(L.marker([seg[i].lat,seg[i].lon], {icon: cadIcon}).bindPopup("Cadence: "+seg[i].ext.cad));
             }
         }
-        hrMarkerGroup[index] = L.layerGroup(hrMarkers).addTo(map);
-	hrToggle[index] = hrMarkerGroup[index].addTo(map);
-        cadMarkerGroup[index] = L.layerGroup(cadMarkers).addTo(map);
+        hrMarkerGroup[index] = L.layerGroup(hrMarkers);
+	hrToggle[index] = hrMarkerGroup[index];
+        hrToggle[index].addTo(map);
+        cadMarkerGroup[index] = L.layerGroup(cadMarkers);
 	cadToggle[index] = cadMarkerGroup[index];
+        cadToggle[index].addTo(map);
     }
 }
 
 /* Removes the heart rate icons from the map. */
 function delIcon(index){
-    if (document.getElementById('hr').checked){
-	map.removeLayer(hrMarkerGroup[index]);
-	delete hrMarkerGroup[index];
-        delete hrToggle[index];
-    }
-    else if (document.getElementById('cad').checked){
-        map.removeLayer(cadMarkerGroup[index]);
-	delete cadMarkerGroup[index];
-        delete cadToggle[index];
-    }
+    map.removeLayer(hrMarkerGroup[index]);
+    delete hrMarkerGroup[index];
+    delete hrToggle[index];
+    map.removeLayer(cadMarkerGroup[index]);
+    delete cadMarkerGroup[index];
+    delete cadToggle[index];
 }
 
 function radClick() {
@@ -114,8 +112,7 @@ function radClick() {
             map.removeLayer(cadToggle[key]);
         });
     }
-    else if (document.getElementById('hr').checked && selectedFiles.length != 0){
-        console.log(selectedFiles.length)
+    else if (document.getElementById('hr').checked){
         Object.keys(hrMarkerGroup).forEach(function(key) {
             hrMarkerGroup[key].eachLayer(function (layer) {
                 hrToggle[key] = hrMarkerGroup[key];
@@ -126,8 +123,7 @@ function radClick() {
             map.removeLayer(cadToggle[key]);
         });
     }
-    else if (document.getElementById('cad').checked && selectedFiles.length != 0){
-        console.log(selectedFiles.length)
+    else if (document.getElementById('cad').checked){
         Object.keys(cadMarkerGroup).forEach(function(key) {
             cadMarkerGroup[key].eachLayer(function (layer) {
                 cadToggle[key] = cadMarkerGroup[key];
