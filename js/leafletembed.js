@@ -114,7 +114,8 @@ function radClick() {
             map.removeLayer(cadToggle[key]);
         });
     }
-    else if (document.getElementById('hr').checked){
+    else if (document.getElementById('hr').checked && selectedFiles.length != 0){
+        console.log(selectedFiles.length)
         Object.keys(hrMarkerGroup).forEach(function(key) {
             hrMarkerGroup[key].eachLayer(function (layer) {
                 hrToggle[key] = hrMarkerGroup[key];
@@ -125,7 +126,8 @@ function radClick() {
             map.removeLayer(cadToggle[key]);
         });
     }
-    else if (document.getElementById('cad').checked){
+    else if (document.getElementById('cad').checked && selectedFiles.length != 0){
+        console.log(selectedFiles.length)
         Object.keys(cadMarkerGroup).forEach(function(key) {
             cadMarkerGroup[key].eachLayer(function (layer) {
                 cadToggle[key] = cadMarkerGroup[key];
