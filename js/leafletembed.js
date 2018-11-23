@@ -84,10 +84,10 @@ function addIcon(index){
                 cadMarkers.push(L.marker([seg[i].lat,seg[i].lon], {icon: cadIcon}).bindPopup("Cadence: "+seg[i].ext.cad));
             }
         }
-        hrMarkerGroup[index] = L.layerGroup(hrMarkers);
+        hrMarkerGroup[index] = L.layerGroup(hrMarkers).addTo(map);
 	hrToggle[index] = hrMarkerGroup[index].addTo(map);
-        cadMarkerGroup[index] = L.layerGroup(cadMarkers);
-	cadToggle[index] = cadMarkerGroup[index].addTo(map);
+        cadMarkerGroup[index] = L.layerGroup(cadMarkers).addTo(map);
+	cadToggle[index] = cadMarkerGroup[index];
     }
 }
 
