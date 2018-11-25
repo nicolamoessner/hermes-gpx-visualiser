@@ -30,30 +30,33 @@
         <div id="wrapper-body" class="center-block">
           <div class="container mb-5">
             <div class="row">
-                <div class="col-3 border-right my-1">
-                  <h3 class="text-center"><strong>GPX Files</strong></h3>
-                  <ul id="gpx-files-list" class="list-group">
-                  </ul>
-                  <div class="row pt-4">
-                    <div class="col-12 mb-3">
-                      <a href="index.html">
-                        <button style="white-space: normal; width:100%;" class="btn btn-outline-info" data-toggle="popover"
-                        title="Return to upload a different set of gpx files.">Return to upload files</button>
-                      </a>
-                      <!-- <a href="index.html"><img src="img/return-btn.png" id="return-btn-img" class="img-fluid"></a> -->
-                    </div>
-                    <!-- <div class="col-6 mb-3">
-                      Return to upload a different set of gpx files.
-                    </div> -->
+              <!-- Display for gpx files uploaded by the user - inserted by javascript on page load. -->
+              <div class="col-3 border-right my-1">
+                <h3 class="text-center"><strong>GPX Files</strong></h3>
+                <ul id="gpx-files-list" class="list-group">
+                </ul>
+                <div class="row pt-4">
+                  <div class="col-12 mb-3">
+                    <a href="index.html">
+                      <button style="white-space: normal; width:100%;" class="btn btn-outline-info" data-toggle="popover"
+                      title="Return to upload a different set of gpx files.">Return to upload files</button>
+                    </a>
                   </div>
                 </div>
-                <div class="col-9 m-0 p-0">
-                  <div id="map"></div>
-                </div>
+              </div>                
+              <!-- - - - -->
+
+              <!-- Display for interactive map -->
+              <div class="col-9 m-0 p-0">
+                <div id="map"></div>
+              </div>
+              <!-- - - - -->
             </div>
+            
             <div class="row pt-2">
               <div class="col-3">
               </div>
+              <!-- Radio buttons to add symbols to interactive map. -->
               <div id="radio" class="col-9 col-sm-7 px-1">
                <form action="#">
                   <span>Map display options:&nbsp;&nbsp;</span>
@@ -71,15 +74,18 @@
                 </label>
                 </form>
               </div>
-              </div>
-                <hr />
-                <div class="row">
-                  <!-- <div class="col-12"> -->
-                    <div id="togglesContainer" class="col-12" style="width: 100%;">
-                    </div>
-                  <!-- </div> -->
-                </div>
+              <!-- - - - -->
             </div>
+
+            <hr />
+
+            <!-- Display for toggle blocks containing plots - inserted by javascript when gpx file is selected from panel. -->
+            <div class="row">
+              <div id="togglesContainer" class="col-12" style="width: 100%;">
+              </div>
+            </div>
+            <!-- - - - -->
+          </div>
         </div>
 
         <!-- Scipts -->
