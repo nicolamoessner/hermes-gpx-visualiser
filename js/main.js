@@ -93,29 +93,11 @@ function gpxFileParse(gpxFile) {
 
         /* Create gpx object and save to session storage. */
         var gpxObj = gpxObjectCreate(doc);
-        if (track.getElementsByTagName("name")[0]) {
-            gpxName = doc.getElementsByTagName("name")[0].childNodes[0].nodeValue;
-        } else {
-            return handleError(gpxFile);
-        }
-        if (track.getElementsByTagName("metadata")[0]) {
-            if (track.getElementsByTagName("time")[0]) {
-                gpxDate = doc.getElementsByTagName("metadata")[0].getElementsByTagName("time")[0].childNodes[0].nodeValue;
-            } else {
-                return handleError(gpxFile);
-            }
-        } else {
-            return handleError(gpxFile);
-        }
+        gpxName = doc.getElementsByTagName("name")[0].childNodes[0].nodeValue;
+        gpxDate = doc.getElementsByTagName("metadata")[0].getElementsByTagName("time")[0].childNodes[0].nodeValue;
         sessionStorage.setItem(gpxName+" "+gpxDate, JSON.stringify(gpxObj));
     }
     reader.readAsText(gpxFile);
-
-    function handleError(gpxFile) {
-        uploadedFiles = '';
-        alert("There is a problem with the file "+gpxFile+". Please remove this from your selected files.");
-        return uploadedFiles;        
-    }
 }
 
 /* Creates a gpx object to store data from xml file. The gpxObject has the following form:
